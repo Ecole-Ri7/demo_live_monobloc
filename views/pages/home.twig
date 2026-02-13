@@ -16,7 +16,8 @@
 <form action="/books/{{book.id}}/delete" method="POST">
     <button>Supprimer</button>
 </form>
-<button id="updateBook" value="{{book.id}}" data-title="{{book.title}}" data-author="{{book.author}}">Modifier</button>
+<button class="updateBook" value="{{book.id}}" data-title="{{book.title}}"
+    data-author="{{book.author}}">Modifier</button>
 
 {% endfor %}
 
@@ -41,14 +42,14 @@
 {% block script %}
 
 <script>
-    const updateBookBtn = document.querySelector("#updateBook")
+    const updateBookBtns = document.querySelectorAll(".updateBook")
     const modale = document.querySelector("#modale")
     const updateForm = document.querySelector("#updateForm")
     const closeModale = document.querySelector("#closeModale")
     const title = document.querySelector("#title")
     const author = document.querySelector("#author")
 
-    updateBookBtn.addEventListener("click", (e) => {
+    updateBookBtns.forEach((btn) => btn.addEventListener("click", (e) => {
         e.preventDefault();
 
         const currentTitle = e.target.dataset.title;
@@ -60,7 +61,7 @@
         updateForm.setAttribute("action", value);
 
     })
-
+    )
     closeModale.addEventListener("click", (e) => {
         e.preventDefault();
         modale.classList.toggle("active")
