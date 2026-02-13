@@ -6,6 +6,7 @@ export async function home(req, res) {
     try {
         // Récupère tous les livres en base de données
         const books = await prisma.book.findMany()
+        
         // Affiche la page d'accueil en lui envoyant la liste des livres
         res.render("pages/home.twig", {
             books
