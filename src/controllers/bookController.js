@@ -2,7 +2,7 @@ import { PrismaClient } from "../generated/prisma/client.js";
 import { adapter } from "../../prisma/adapter.js";
 const prisma = new PrismaClient({ adapter });
 
-export async function home(req, res){
+export async function home(req, res) {
     try {
         // Récupère tous les livres en base de données
         const books = await prisma.book.findMany()
@@ -15,16 +15,16 @@ export async function home(req, res){
         console.log(error);
         // Affiche la page avec l'erreur
         res.render("pages/home.twig", {
-            error:"Erreur lors de la récupération des livres"
+            error: "Erreur lors de la récupération des livres"
         })
     }
 }
 
-export async function addBook(req,res){
+export async function addBook(req, res) {
     try {
-        const {title, author} = req.body
+        const { title, author } = req.body
         await prisma.book.create({
-            data:{
+            data: {
                 title,
                 author,
                 userId: req.session.user
@@ -34,15 +34,15 @@ export async function addBook(req,res){
     } catch (error) {
         console.log(error);
         res.render("pages/home.twig", {
-            error:"Erreur lors de la création d'un livre"
+            error: "Erreur lors de la création d'un livre"
         })
     }
 }
 
-export async function deleteBook(req, res){
+export async function deleteBook(req, res) {
     try {
         await prisma.book.delete({
-            where:{
+            where: {
                 id: parseInt(req.params.id)
             }
         })
@@ -50,7 +50,29 @@ export async function deleteBook(req, res){
     } catch (error) {
         console.log(error);
         res.render("pages/home.twig", {
-            error:"Erreur lors de la suppression d'un livre"
+            error: "Erreur lors de la suppression d'un livre"
+        })
+    }
+}
+
+
+export async function updateBook(req, res) {
+    try {
+        const { title, author } = req.body
+        await prisma.book.update({
+            where: {
+                id: parseInt(req.params.id)
+            },
+            data: {
+                title,
+                author,
+            }
+        })
+        res.redirect("/")
+    } catch (error) {
+        console.log(error);
+        res.render("pages/home.twig", {
+            error: "Erreur lors de la modification d'un livre"
         })
     }
 }

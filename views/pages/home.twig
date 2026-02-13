@@ -1,17 +1,71 @@
+{% extends "../layouts/base.twig" %}
+
 {% block main %}
-    <form action="/books/add" method="POST">
-        <input type="text" name="title" placeholder="Titre">
-        <input type="text" name="author" placeholder="Auteur">
-        <button>Créer</button>
+<form action="/books/add" method="POST">
+    <input type="text" name="title" placeholder="Titre">
+    <input type="text" name="author" placeholder="Auteur">
+    <button>Créer</button>
+</form>
+{% if error %}
+<p>{{ error }}</p>
+{% endif %}
+
+{% for book in books %}
+<h2>{{book.title}}</h2>
+<p>{{book.author}}</p>
+<form action="/books/{{book.id}}/delete" method="POST">
+    <button>Supprimer</button>
+</form>
+<button id="updateBook" value="{{book.id}}" data-title="{{book.title}}" data-author="{{book.author}}">Modifier</button>
+
+
+{% endfor %}
+
+<div class="modale" id="modale">
+    <form id="updateForm" action="" method="POST">
+        <div>
+            <label for="title">Titre</label>
+            <input type="text" id="title" name="title" value="">
+        </div>
+        <div>
+            <label for="author">Auteur</label>
+            <input type="text" id="author" name="author" value="">
+        </div>
+        <button type="submit">Enregistrer</button>
+        <button type="button" id="closeModale">Fermer</button>
     </form>
-    {% if error %}
-        <p>{{ error }}</p>
-    {% endif %}
-    {% for book in books %}
-        <h2>{{book.title}}</h2>
-        <p>{{book.author}}</p>
-        <form action="/books/{{book.id}}/delete" method="POST">
-            <button>Supprimer</button>
-        </form>
-    {% endfor %}
-{% endblock %} 
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+    const updateBookBtn = document.querySelector("#updateBook")
+    const modale = document.querySelector("#modale")
+    const updateForm = document.querySelector("#updateForm")
+    const closeModale = document.querySelector("#closeModale")
+    const title = document.querySelector("#title")
+    const author = document.querySelector("#author")
+
+    updateBookBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const currentTitle = e.target.dataset.title;
+        const currentAuthor = e.target.dataset.author;
+        title.value = currentTitle;
+        author.value = currentAuthor;
+        modale.classList.toggle("active")
+
+        const value = `/books/${e.target.value}/update`;
+        updateForm.setAttribute("action", value);
+
+    })
+
+    closeModale.addEventListener("click", (e) => {
+        e.preventDefault();
+        modale.classList.toggle("active")
+    })
+</script>
+
+{% endblock %}
