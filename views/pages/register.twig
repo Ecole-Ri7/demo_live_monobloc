@@ -1,0 +1,14 @@
+{% extends "../layouts/base.twig" %}
+
+{% block main %}
+    <form action="/register" method="POST">
+        <input type="text" name="firstName" placeholder="Prénom">
+        <input type="text" name="lastName" placeholder="Nom">
+        <input type="mail" name="mail" placeholder="Mail">
+        <input type="password" name="password" placeholder="Mot de passe">
+        <button>S'inscrire</button>
+    </form> 
+    {% if error %}
+        <p>{{error}}</p>
+    {% endif %}
+{% endblock %}

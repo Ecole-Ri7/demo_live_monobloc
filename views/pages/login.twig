@@ -1,0 +1,10 @@
+{% block main %}
+    <form action="/login" method="POST">
+        <input type="mail" name="mail" placeholder="Votre adresse mail">
+        <input type="password" name="password" placeholder="Mot de passe">
+        <button>Se connecter</button>
+    </form>
+    {% if error %}
+        <p>{{error}}</p>
+    {% endif %}
+{% endblock %}
